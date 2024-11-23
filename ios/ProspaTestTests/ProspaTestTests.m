@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface CryptAppTests : XCTestCase
+@interface ProspaTestTests : XCTestCase
 
 @end
 
-@implementation CryptAppTests
+@implementation ProspaTestTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "CryptApp.app"
-               BlueprintName = "CryptApp"
-               ReferencedContainer = "container:CryptApp.xcodeproj">
+               BuildableName = "ProspaTest.app"
+               BlueprintName = "ProspaTest"
+               ReferencedContainer = "container:ProspaTest.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "CryptAppTests.xctest"
-               BlueprintName = "CryptAppTests"
-               ReferencedContainer = "container:CryptApp.xcodeproj">
+               BuildableName = "ProspaTestTests.xctest"
+               BlueprintName = "ProspaTestTests"
+               ReferencedContainer = "container:ProspaTest.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "CryptApp.app"
-            BlueprintName = "CryptApp"
-            ReferencedContainer = "container:CryptApp.xcodeproj">
+            BuildableName = "ProspaTest.app"
+            BlueprintName = "ProspaTest"
+            ReferencedContainer = "container:ProspaTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "CryptApp.app"
-            BlueprintName = "CryptApp"
-            ReferencedContainer = "container:CryptApp.xcodeproj">
+            BuildableName = "ProspaTest.app"
+            BlueprintName = "ProspaTest"
+            ReferencedContainer = "container:ProspaTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

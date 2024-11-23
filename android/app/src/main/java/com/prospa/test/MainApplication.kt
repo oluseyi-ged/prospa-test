@@ -1,4 +1,4 @@
-package com.crypt.app
+package com.prospa.test
 
 import android.app.Application
 import com.facebook.react.PackageList

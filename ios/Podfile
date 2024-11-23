@@ -26,7 +26,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'CryptApp' do
+target 'ProspaTest' do
 
   config = use_native_modules!
 
@@ -46,7 +46,7 @@ target 'CryptApp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'CryptAppTests' do
+  target 'ProspaTestTests' do
     inherit! :complete
     # Pods for testing
   end
