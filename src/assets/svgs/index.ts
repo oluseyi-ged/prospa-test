@@ -19,6 +19,8 @@ export {default as Logo} from './logo.svg';
 export {default as Metrics} from './metrics.svg';
 export {default as More} from './more.svg';
 export {default as Plus} from './plus.svg';
+export {default as PromoOne} from './promo-one.svg';
+export {default as PromoTwo} from './promo-two.svg';
 export {default as Trans} from './trans.svg';
 export {default as TransferIcon} from './transfer-icon.svg';
 export {default as Transfer} from './transfer.svg';

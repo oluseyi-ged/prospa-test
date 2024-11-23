@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import {PromoOne, PromoTwo} from '@assets/images';
 import {Block, SizedBox, SvgIcon, Text} from '@components';
 import {Avatar} from '@components/avatar';
 import {HDP, transactions} from '@helpers';
 import {calculatePercentages} from '@utils';
 import React, {FC} from 'react';
-import {Dimensions, FlatList, View} from 'react-native';
+import {Dimensions, FlatList, Image, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {default as styles} from './styles';
 
@@ -210,6 +211,21 @@ export const Home: FC = ({navigation}: any) => {
               </Block>
             );
           })}
+        </Block>
+
+        <SizedBox height={15} />
+
+        <Block gap={11} justify="space-evenly" row>
+          <Image
+            source={PromoOne}
+            style={{width: HDP(200), height: HDP(140)}}
+            resizeMode="contain"
+          />
+          <Image
+            source={PromoTwo}
+            style={{width: HDP(200), height: HDP(140)}}
+            resizeMode="contain"
+          />
         </Block>
       </Block>
 
