@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "918756228399",
+    "project_id": "crypt-bc8f5",
+    "storage_bucket": "crypt-bc8f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918756228399:android:89f78529ffd6d123ef35da",
+        "android_client_info": {
+          "package_name": "com.crypt.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSAS1ghMjR-mYBdp6ATmtRPVgAFuzfDtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

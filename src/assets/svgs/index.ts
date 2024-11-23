@@ -1,0 +1,10 @@
+export {default as BackOutline} from './back-outline.svg';
+export {default as Back} from './back.svg';
+export {default as Calc} from './calc.svg';
+export {default as Check} from './check.svg';
+export {default as Close} from './close.svg';
+export {default as Credit} from './credit.svg';
+export {default as Debit} from './debit.svg';
+export {default as Ice} from './ice.svg';
+export {default as Logo} from './logo.svg';
+export {default as Warning} from './warning.svg';
