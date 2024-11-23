@@ -191,7 +191,6 @@ export const Home: FC = ({navigation}: any) => {
                 row
                 justify="space-between"
                 style={{
-                  borderStyle: i < transactions.length - 1 ? 'solid' : 'none',
                   borderBottomWidth: i < transactions.length - 1 ? 1 : 0,
                   borderColor: '#EFF0F2',
                   paddingVertical: HDP(14),

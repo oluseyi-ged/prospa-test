@@ -78,13 +78,13 @@ export const Login: FC = ({navigation}: any) => {
 
                 <Button
                   radius={6}
-                  // onPress={handleSubmit}
                   onPress={() => {
                     navigation.reset({
                       index: 0,
                       routes: [{name: 'Home'}],
                     });
                   }}
+                  // onPress={handleSubmit}
                   justifyContent="center"
                   alignItems="center"
                   color={palette.pink}
