@@ -1,17 +1,17 @@
 import {RF} from '@helpers';
-import {family, palette} from '@theme';
+import {family} from '@theme';
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   navText: {
-    fontSize: RF(9),
+    fontSize: RF(11),
     fontFamily: family.Regular,
-    color: palette.lightText,
+    color: '#8397AB',
   },
   navActive: {
-    fontSize: RF(9),
+    fontSize: RF(11),
     fontFamily: family.Medium,
-    color: palette.blue,
+    color: '#FA4A84',
   },
 });
 

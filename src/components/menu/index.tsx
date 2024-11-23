@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import {SizedBox} from '@components';
+import {SizedBox, SvgIcon} from '@components';
 import {HDP, HP} from '@helpers';
 import React, {useCallback} from 'react';
-import {Platform, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Platform, Text, TouchableOpacity, View} from 'react-native';
 import {RootState, useAppSelector} from 'store';
 import styles from './styles';
 
@@ -12,59 +12,47 @@ export const NavMenu = ({state, descriptors, navigation}: any) => {
   if (focusedOptions.tabBarVisible === false) {
     return null;
   }
-
+  const {width} = Dimensions.get('window');
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const MenuIcons = useCallback(({label, status}: any) => {
     switch (label.toLowerCase()) {
       case 'more':
         return (
           <View>
-            {/* <SvgIcon
-              name={status ? 'more-active' : 'more-inactive'}
-              size={25}
-            /> */}
+            <SvgIcon name={'more'} size={25} />
             <SizedBox height={6} />
             <Text style={[!status ? styles.navText : styles.navActive]}>
               More
             </Text>
           </View>
         );
-      case 'wallet':
+      case 'invoice':
         return (
           <View>
-            {/* <SvgIcon
-              name={status ? 'wallet-active' : 'wallet-inactive'}
-              size={25}
-            /> */}
+            <SvgIcon name={'invoice'} size={25} />
             <SizedBox height={6} />
             <Text style={[!status ? styles.navText : styles.navActive]}>
-              Wallet
+              Invoice
             </Text>
           </View>
         );
-      case 'trips':
+      case 'transfer':
         return (
           <View>
-            {/* <SvgIcon
-              name={status ? 'trips-active' : 'trips-inactive'}
-              size={25}
-            /> */}
+            <SvgIcon name={'trans'} size={25} />
             <SizedBox height={6} />
             <Text style={[!status ? styles.navText : styles.navActive]}>
-              Trips
+              Transfer
             </Text>
           </View>
         );
       default:
         return (
           <View>
-            {/* <SvgIcon
-              name={status ? 'home-active' : 'home-inactive'}
-              size={25}
-            /> */}
+            <SvgIcon name={'accounts'} size={25} />
             <SizedBox height={6} />
             <Text style={[!status ? styles.navText : styles.navActive]}>
-              Home
+              Accounts
             </Text>
           </View>
         );
@@ -79,10 +67,10 @@ export const NavMenu = ({state, descriptors, navigation}: any) => {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: token?.length ? 'space-between' : 'space-evenly',
+        justifyContent: 'space-between',
         alignSelf: 'center',
-        paddingHorizontal: HDP(30),
-        paddingBottom: HDP(Platform.OS === 'android' ? 4 : 10),
+        // paddingHorizontal: HDP(30),
+        paddingBottom: HDP(Platform.OS === 'android' ? 8 : 20),
         position: 'absolute',
         bottom: HP(Platform.OS === 'android' ? -2 : -1.5),
         borderTopWidth: 1,
@@ -140,11 +128,12 @@ export const NavMenu = ({state, descriptors, navigation}: any) => {
                 {
                   alignItems: 'center',
                   paddingVertical: HDP(10),
+                  width: width / 4,
                 },
-                // isFocused && {
-                //   borderTopColor: '#6CCF00',
-                //   borderTopWidth: 4,
-                // },
+                isFocused && {
+                  borderTopColor: '#FA4A84',
+                  borderTopWidth: 1,
+                },
               ]}>
               <MenuIcons label={label} status={isFocused} />
             </View>

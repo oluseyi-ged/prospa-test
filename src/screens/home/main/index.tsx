@@ -1,207 +1,219 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Block, BottomSheet, SizedBox, SvgIcon, Text} from '@components';
-import Rates from '@components/rates';
-import {HDP} from '@helpers';
-import auth from '@react-native-firebase/auth';
-import {useFocusEffect} from '@react-navigation/native';
-import {useGetRatesQuery, useLazyGetWalletsQuery} from '@services/queryApi';
-import {setRates} from '@slices/rates';
-import {palette} from '@theme';
-import {transformRates} from '@utils';
-import React, {FC, useEffect, useState} from 'react';
-import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
-import {RootState, useAppDispatch, useAppSelector} from 'store';
+import {Block, SizedBox, SvgIcon, Text} from '@components';
+import {Avatar} from '@components/avatar';
+import {HDP, transactions} from '@helpers';
+import {calculatePercentages} from '@utils';
+import React, {FC} from 'react';
+import {Dimensions, FlatList, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {default as styles} from './styles';
 
 export const Home: FC = ({navigation}: any) => {
   const {width, height} = Dimensions.get('window');
-  const [calcOpen, setCalcOpen] = useState(false);
-  const userData: any = useAppSelector((state: RootState) => state.auth);
-  const ratesArr: any = useAppSelector((state: RootState) => state.rates);
-  const [user, setUser] = useState<any>(null);
-  const dispatch = useAppDispatch();
+  const accounts = [
+    {
+      money_in: 'N450,000.00',
+      money_out: 'N250,000.00',
+      difference: 'N150,000.00',
+    },
+    {
+      money_in: 'N600,000.00',
+      money_out: 'N400,000.00',
+      difference: 'N200,000.00',
+    },
+    {
+      money_in: 'N300,000.00',
+      money_out: 'N150,000.00',
+      difference: 'N150,000.00',
+    },
+  ];
 
-  const [fire, {data: walletData, isLoading: walletLoad}]: any =
-    useLazyGetWalletsQuery();
+  const result = calculatePercentages(accounts);
 
-  const {
-    data: rates,
-    isLoading: ratesLoad,
-    isSuccess: ratesTrue,
-  } = useGetRatesQuery(null, {
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
-  });
-
-  const getTotalBalance = () => {
-    return walletData?.data?.wallets?.reduce(
-      (total, wallet) => total + wallet.balance,
-      0,
-    );
-  };
-
-  let transactions: any = [];
-
-  walletData?.data?.wallets.forEach(wallet => {
-    if (wallet.transactions && Array.isArray(wallet.transactions)) {
-      wallet.transactions.forEach(transaction => {
-        let formattedTransaction: any = {
-          amount: transaction.amount,
-          description: transaction.description,
-          type: wallet.type, // Fetching type from the parent wallet object
-        };
-
-        // Determine kind (debit or credit) based on balance changes
-        if (transaction.balanceBefore && transaction.newBalance) {
-          const balanceBefore = parseFloat(transaction.balanceBefore);
-          const newBalance = parseFloat(transaction.newBalance);
-
-          if (newBalance < balanceBefore) {
-            formattedTransaction.kind = 'debit';
-          } else {
-            formattedTransaction.kind = 'credit';
-          }
-        }
-
-        // Convert meta?.date to real date format if it exists
-        if (transaction.meta && transaction.meta.date) {
-          formattedTransaction.date = new Date(transaction.meta.date);
-        }
-
-        transactions.push(formattedTransaction);
-      });
-    }
-  });
-
-  useEffect(() => {
-    if (ratesTrue) {
-      dispatch(setRates(transformRates(rates?.data)));
-    }
-  }, [ratesTrue]);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fire(userData?.id);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
-  );
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(user => {
-      setUser(user);
-    });
-
-    return subscriber;
-  }, []);
-
-  const usdToNgn = ratesArr?.find(
-    rate => rate?.origin === 'USD' && rate?.base === 'NGN',
+  const renderItem = ({item}) => (
+    <Block
+      onPress={() => {
+        navigation.navigate('Account');
+      }}
+      style={styles.accountBox}
+      width={width * 0.88}
+      alignSelf="center"
+      bg="#fff">
+      <Text textTransform="uppercase">Current Account</Text>
+      <Text color="#8397AB">PROVIDUS BANK - 9906533917</Text>
+      <SizedBox height={15} />
+      <Text color="#1C1335" h4>
+        {item.money_in}
+      </Text>
+      <SizedBox height={15} />
+      <Block row justify="space-between">
+        <Text>Money in</Text>
+        <Text color="#4CD964">{item.money_in}</Text>
+      </Block>
+      <SizedBox height={7} />
+      <View style={[styles.statBar, {backgroundColor: '#4CD96450'}]}>
+        <View
+          style={{
+            height: '100%',
+            backgroundColor: '#4CD964',
+            width: item.money_out_percentage,
+          }}
+        />
+      </View>
+      <SizedBox height={20} />
+      <Block row justify="space-between">
+        <Text>Money out</Text>
+        <Text color="#FA4A84">{item.money_out}</Text>
+      </Block>
+      <SizedBox height={7} />
+      <View style={[styles.statBar, {backgroundColor: '#FEDBE6'}]}>
+        <View
+          style={{
+            height: '100%',
+            backgroundColor: '#FA4A84',
+            width: item.money_out_percentage,
+          }}
+        />
+      </View>
+      <SizedBox height={20} />
+      <Block row justify="space-between">
+        <Text>Difference</Text>
+        <Text color="#FCBA06">{item.difference}</Text>
+      </Block>
+      <SizedBox height={7} />
+      <View style={[styles.statBar, {backgroundColor: '#FCBA0650'}]}>
+        <View
+          style={{
+            height: '100%',
+            backgroundColor: '#FCBA06',
+            width: item.difference_percentage,
+          }}
+        />
+      </View>
+    </Block>
   );
 
   return (
-    <Block style={styles.pageWrap}>
-      <Block scroll showScrollbar={false}>
+    <Block bg="#fff" flex={1} scroll bounce showScrollbar={false}>
+      <Block
+        height={height * 0.2}
+        bg="#1C1335"
+        style={{
+          paddingHorizontal: HDP(16),
+        }}>
         <SizedBox height={20} />
-        <Text>Hello {userData?.firstName} Chi</Text>
-        <SizedBox height={30} />
-        <Block bg="#0C212F20" radius={8} style={styles.walletBG}>
-          <Block transparent row>
-            <Block transparent>
-              <Text color={palette.purple} p>
-                Total Chi Value:
-              </Text>
-              <Text bold h4>
-                $
-                {walletLoad
-                  ? '--:--'
-                  : getTotalBalance()?.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-              </Text>
-            </Block>
-            <SvgIcon
-              name="calc"
-              size={38}
-              onPress={() => setCalcOpen(!calcOpen)}
-            />
-          </Block>
-          <SizedBox height={20} />
-          <Block transparent alignSelf="center">
-            <SizedBox height={2} backgroundColor={'#000'} width={width * 0.8} />
-          </Block>
-          <SizedBox height={20} />
-          <Text h6>
-            $1 = N{usdToNgn?.rate?.toLocaleString()} | Exchange rate today
+        <Block justify="space-between" row alignItems="center">
+          <Text h4 color="#fff">
+            Hello Kathy!
           </Text>
-          <SizedBox height={10} />
+          <Avatar
+            shape="circle"
+            name={'Indigo'}
+            url={
+              'https://images.pexels.com/photos/5060819/pexels-photo-5060819.jpeg?auto=compress&cs=tinysrgb&w=800'
+            }
+            size="tiny"
+          />
         </Block>
-        <SizedBox height={30} />
-        <TouchableOpacity
-          style={styles.sendBtn}
-          onPress={() => navigation.navigate('Send')}>
-          <Text center color={'#fff'} h6>
-            Send Chi
-          </Text>
-        </TouchableOpacity>
-        <SizedBox height={30} />
+      </Block>
 
-        <Block>
-          <Text p>Recent Transactions</Text>
+      <SizedBox height={20} />
+      <Block
+        style={{
+          paddingHorizontal: HDP(16),
+          marginTop: HDP(-100),
+        }}>
+        <Block height={height * 0.3}>
+          <FlatList
+            data={result}
+            horizontal
+            pagingEnabled // Enables snap-to-place behavior
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderItem}
+            contentContainerStyle={styles.container}
+            snapToAlignment="center" // Ensures snapping aligns to the center
+            decelerationRate="fast" // Makes snapping faster
+            snapToInterval={width * 0.9 + 10} // Adjusts to match item width + spacing
+            bounces={false}
+          />
         </Block>
 
-        <SizedBox height={30} />
+        <SizedBox height={20} />
 
-        {transactions?.length ? (
-          <Block height={height * 0.5}>
-            <FlatList
-              contentContainerStyle={{
-                paddingVertical: HDP(5),
-                display: 'flex',
-                paddingHorizontal: HDP(5),
-                gap: HDP(12),
-                // height: height * 0.4,
-              }}
-              data={transactions}
-              renderItem={({item}) => (
-                <Block
-                  radius={10}
-                  style={{padding: HDP(20)}}
-                  bg="#151A2920"
-                  row
-                  justifyContent="space-between">
-                  <Block transparent row gap={16}>
-                    <SvgIcon name={item?.kind?.toLowerCase()} size={34} />
-                    <Block transparent gap={6}>
-                      <Text color="#000" h6>
-                        $ {item?.amount}
-                      </Text>
-                      <Text s>
-                        {item?.type} - {item?.description}
-                      </Text>
-                    </Block>
-                  </Block>
-                </Block>
-              )}
-            />
-            <SizedBox height={30} />
-          </Block>
-        ) : (
-          <Block transparent>
-            <SvgIcon name="ice" size={100} />
-            <SizedBox height={10} />
-            <Text center p>
-              Oops! No transactions yet.
+        <Block
+          bg="#fff"
+          style={styles.accountBox}
+          row
+          alignItems="flex-start"
+          justify="space-between">
+          <Block>
+            <Text textTransform="uppercase">Savings Account</Text>
+            <Text color="#8397AB">SUB ACCOUNT - 12346789</Text>
+            <SizedBox height={15} />
+            <Text color="#1C1335" h4>
+              N39,342.45
             </Text>
           </Block>
-        )}
+          <SvgIcon name="card" size={40} />
+        </Block>
+
+        <SizedBox height={15} />
+
+        <LinearGradient
+          colors={['#FA4A84', '#7E51FF', '#00D2FF']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 1}}
+          style={styles.linearGradient}>
+          <View style={{width: '70%'}}>
+            <Text color="#FFFFFF">
+              Create multiple sub-accounts and manage your money with ease!
+            </Text>
+          </View>
+          <SvgIcon name="plus" size={40} />
+        </LinearGradient>
+
+        <SizedBox height={15} />
+
+        <Block bg="#fff" style={styles.accountBox}>
+          <Block row justify="space-between">
+            <Text color="#1C1335" p>
+              Recent transactions
+            </Text>
+            <SvgIcon name="caret-right" size={12} />
+          </Block>
+          <SizedBox height={15} />
+          {transactions?.slice(0, 3)?.map((tx, i) => {
+            return (
+              <Block
+                key={i}
+                row
+                justify="space-between"
+                style={{
+                  borderStyle: i < transactions.length - 1 ? 'solid' : 'none',
+                  borderBottomWidth: i < transactions.length - 1 ? 1 : 0,
+                  borderColor: '#EFF0F2',
+                  paddingVertical: HDP(14),
+                }}>
+                <Block row gap={16}>
+                  <SvgIcon name={tx?.type} size={40} />
+                  <Block>
+                    <Text>{tx?.name}</Text>
+                    <SizedBox height={5} />
+                    <Text color="#8397AB">{tx?.time}</Text>
+                  </Block>
+                </Block>
+                <Text>
+                  {tx?.status === 'credit' ? '' : '-'}N
+                  {tx?.amount?.toLocaleString()}
+                </Text>
+              </Block>
+            );
+          })}
+        </Block>
       </Block>
-      <BottomSheet
-        show={calcOpen}
-        dropPress={() => setCalcOpen(false)}
-        afterHide={() => setCalcOpen(false)}
-        content={<Rates close={() => setCalcOpen(false)} />}
-      />
+
+      <SizedBox height={100} />
     </Block>
   );
 };

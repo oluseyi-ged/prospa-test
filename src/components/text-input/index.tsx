@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {SizedBox, SvgIcon} from '@components';
 // import {SvgIcon} from '@components/svg-icon';
+import {GradientBorderView} from '@good-react-native/gradient-border';
 import {HDP, RF} from '@helpers';
 import {palette} from '@theme';
 import React, {FC, useEffect, useState} from 'react';
@@ -135,98 +136,105 @@ export const TextInput: FC<Props> = ({
 
   return (
     <View>
-      {label && (
+      {(value?.length || focused) && (
         <>
-          <Text style={[style.label, labelStyle, white && {color: '#13556D'}]}>
+          <Text style={[style.label, labelStyle, white && {color: '#FA4A84'}]}>
             {label}
           </Text>
-          <SizedBox height={8} />
         </>
       )}
 
-      <View
+      <GradientBorderView
+        gradientProps={{
+          colors: focused ? ['#7E51FF', '#FA4A84'] : ['#FFFFFF', '#FFFFFF'],
+        }}
         style={[
           style.inputContainer,
-          // {paddingHorizontal: padding},
           inputStyle,
           bordered && style.bordered,
           focused && {borderColor: palette.mutedGreen},
         ]}>
-        {iconName1 && (
-          <SvgIcon
-            name={iconName1}
-            size={iconSize1 || 20}
-            onPress={onPress1}
-            containerStyle={{marginRight: HDP(24)}}
-          />
-        )}
-        {firstText && (
-          <Text
+        <View>
+          {iconName1 && (
+            <SvgIcon
+              name={iconName1}
+              size={iconSize1 || 20}
+              onPress={onPress1}
+              containerStyle={{marginRight: HDP(24)}}
+            />
+          )}
+          {firstText && (
+            <Text
+              style={[
+                {
+                  color: bordered ? '#fff' : '#082932',
+                  fontSize: RF(14),
+                  paddingRight: HDP(10),
+                },
+              ]}>
+              {firstText}
+            </Text>
+          )}
+          <TN
+            placeholder={placeholder}
             style={[
               {
-                color: bordered ? '#fff' : '#082932',
-                fontSize: RF(14),
-                paddingRight: HDP(10),
+                // padding,
+                flex: 1,
+                color: bordered ? '#fff' : '#fff',
+                fontSize: RF(12),
               },
-            ]}>
-            {firstText}
-          </Text>
-        )}
-        <TN
-          placeholder={placeholder}
-          style={[
-            {
-              // padding,
-              flex: 1,
-              color: bordered ? '#fff' : '#082932',
-              fontSize: RF(12),
-            },
-            innerStyle,
-          ]}
-          placeholderTextColor={bordered ? '#EAFFD270' : placeholderTextColor}
-          onFocus={() => {
-            onFocus;
-            setFocused(true);
-          }}
-          // onBlur={onBlur}
-          maxLength={maxLength}
-          editable={editable}
-          secureTextEntry={secure}
-          textAlign={textAlign}
-          textAlignVertical={textAlignVertical || 'top'}
-          multiline={multiline}
-          onSubmitEditing={onSubmit}
-          ref={refValue}
-          // onChangeText={onChangeText}
-          onChangeText={text => {
-            onChangeText && onChangeText(text);
-            handleTextChange(text);
-          }}
-          // value={value}
-          value={!formattedValue?.length ? value : formattedValue}
-          // keyboardType={keyboardType}
-          keyboardType={isAmount ? 'numeric' : keyboardType}
-          autoCapitalize={'none'}
-          numberOfLines={numberOfLines}
-          autoFocus={shouldFocus}
-          autoCorrect={autoCorrect}
-        />
-        {clearable && valueText > 0 && (
-          <>
-            <SvgIcon name="check" size={iconSize2 || 16} />
-            <SizedBox width={12} />
-            <SvgIcon
-              name="close"
-              size={16}
-              onPress={() => {
-                onClear();
-                setFormattedValue('');
-                setValueText(0);
-              }}
-            />
-          </>
-        )}
-      </View>
+              innerStyle,
+            ]}
+            placeholderTextColor={bordered ? '#EAFFD270' : placeholderTextColor}
+            onFocus={() => {
+              onFocus;
+              setFocused(true);
+            }}
+            onBlur={() => {
+              onBlur;
+              setFocused(false);
+            }}
+            maxLength={maxLength}
+            editable={editable}
+            secureTextEntry={secure}
+            textAlign={textAlign}
+            textAlignVertical={textAlignVertical || 'top'}
+            multiline={multiline}
+            onSubmitEditing={onSubmit}
+            ref={refValue}
+            // onChangeText={onChangeText}
+            onChangeText={text => {
+              onChangeText && onChangeText(text);
+              handleTextChange(text);
+            }}
+            // value={value}
+            value={!formattedValue?.length ? value : formattedValue}
+            // keyboardType={keyboardType}
+            keyboardType={isAmount ? 'numeric' : keyboardType}
+            autoCapitalize={'none'}
+            numberOfLines={numberOfLines}
+            autoFocus={shouldFocus}
+            autoCorrect={autoCorrect}
+          />
+          {clearable && valueText > 0 && (
+            <>
+              <SvgIcon name="check" size={iconSize2 || 16} />
+              <SizedBox width={12} />
+              <SvgIcon
+                name="close"
+                size={16}
+                onPress={() => {
+                  onClear();
+                  setFormattedValue('');
+                  setValueText(0);
+                }}
+              />
+            </>
+          )}
+        </View>
+      </GradientBorderView>
+
       {info && (
         <>
           <Text style={[style.info, white && {color: '#13556D'}]}>{info}</Text>

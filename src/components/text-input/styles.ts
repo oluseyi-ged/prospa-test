@@ -4,24 +4,20 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   inputContainer: {
-    borderRadius: HDP(8),
     flexDirection: 'row',
     height: HDP(49),
     alignItems: 'center',
-    backgroundColor: '#E6E6E6',
+    backgroundColor: 'transparent',
     borderBottomWidth: 1,
-    borderBottomColor: '#E4E5E5',
-    paddingHorizontal: HDP(16),
   },
   label: {
     fontSize: RF(12),
-    color: '#4C4D4D',
-    fontFamily: family.Medium,
+    color: '#FA4A84',
     alignSelf: 'flex-start',
   },
   error: {
     fontSize: RF(10),
-    color: '#800000',
+    color: 'red',
     fontFamily: family.Regular,
     alignSelf: 'flex-start',
     marginTop: HDP(5),

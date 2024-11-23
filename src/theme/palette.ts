@@ -1,8 +1,8 @@
 /* https://chir.ag/projects/name-that-color If naming is too hard :) */
 
 export const palette = {
-  purple: '#0700FF',
-  pink: '#F4B6CE',
+  purple: '#1B003B',
+  pink: '#FA4A84',
   dark: '#0F0F0F',
   orange: '#EB5428',
   green: '#6CCF00',

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {Block, Button, SizedBox, SvgIcon, Text, TextInput} from '@components';
-import {flash} from '@helpers/FlashMessageHelpers';
-import auth from '@react-native-firebase/auth';
+import {palette} from '@theme';
 import {Formik} from 'formik';
 import React, {FC, useState} from 'react';
 import * as yup from 'yup';
@@ -23,50 +22,30 @@ export const Login: FC = ({navigation}: any) => {
   });
 
   return (
-    <Block safe style={styles.pageWrap}>
+    <Block scroll style={styles.pageWrap}>
       <Block justifyContent="space-between">
         <Block style={styles.btmBox}>
-          <SvgIcon
-            name="back"
-            onPress={() => navigation.goBack()}
-            size={40}
-            containerStyle={{alignSelf: 'flex-start'}}
-          />
-          <SizedBox height={138} />
+          <SizedBox height={60} />
 
-          <Text h4 medium>
-            Welcome Back
+          <Text color="#fff" h3>
+            Welcome back{'\n'}Shiwani
+          </Text>
+          <Text color="#fff" p>
+            Don’t have an account with us? <Text color="#FA4A84">Sign up</Text>
           </Text>
           <SizedBox height={32} />
           <Formik
             initialValues={initialValues}
             onSubmit={async values => {
               setLoading(true);
-              auth()
-                .signInWithEmailAndPassword(values?.email, values?.password)
-                .then(user => {
-                  console.log(user);
-                  // proceed to home screen
-                  navigation.navigate('Home');
-                })
-                .catch(error => {
-                  setLoading(false);
-
-                  console.log(error);
-                  if (error.code === 'auth/invalid-email')
-                    flash.danger({
-                      description: error.message,
-                    });
-                  else if (error.code === 'auth/user-not-found')
-                    flash.danger({
-                      description: 'No User Found',
-                    });
-                  else {
-                    flash.danger({
-                      description: 'Please check your email id or password',
-                    });
-                  }
-                });
+              setTimeout(
+                () =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Home'}],
+                  }),
+                3000,
+              );
             }}
             validateOnChange={false}
             validateOnBlur={false}
@@ -77,7 +56,8 @@ export const Login: FC = ({navigation}: any) => {
                   onChangeText={value => {
                     setFieldValue('email', value);
                   }}
-                  placeholder="Email"
+                  placeholder="Enter email address"
+                  label="Email address"
                   error={errors.email}
                   value={values.email}
                   autoCorrect={false}
@@ -88,22 +68,36 @@ export const Login: FC = ({navigation}: any) => {
                     setFieldValue('password', value);
                   }}
                   placeholder="Password"
+                  label="Password"
                   error={errors.password}
                   value={values.password}
                   autoCorrect={false}
                   type="password"
                 />
-                <SizedBox height={24} />
+                <SizedBox height={28} />
 
                 <Button
-                  radius={128}
-                  onPress={handleSubmit}
+                  radius={6}
+                  // onPress={handleSubmit}
+                  onPress={() => {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{name: 'Home'}],
+                    });
+                  }}
                   justifyContent="center"
                   alignItems="center"
-                  color="#151515"
-                  title="Login"
+                  color={palette.pink}
+                  title="Sign in"
                   loading={loading}
                 />
+
+                <SizedBox height={30} />
+                <Text p center color={'#FA4A84'}>
+                  Forgot your password ?
+                </Text>
+                <SizedBox height={81} />
+                <SvgIcon name="metrics" size={48} />
               </>
             )}
           </Formik>

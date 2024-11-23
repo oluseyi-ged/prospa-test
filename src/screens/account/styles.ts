@@ -28,21 +28,24 @@ const style = StyleSheet.create({
   },
   container: {
     // paddingVertical: 20,
-    paddingHorizontal: HDP(10),
-    gap: HDP(10),
+    // paddingHorizontal: HDP(10),
+    // gap: HDP(10),
     // flex: 1,
   },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  active: {
+    backgroundColor: '#FA4A84',
+  },
+  inactive: {
+    backgroundColor: '#FFFFFF50',
+  },
   accountBox: {
-    padding: HDP(16),
-    borderRadius: HDP(6),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    // padding: HDP(16),
   },
   statBar: {
     width: '100%',
@@ -56,6 +59,9 @@ const style = StyleSheet.create({
     width: width * 0.9,
     alignSelf: 'center',
     padding: HDP(13),
+  },
+  mainBtn: {
+    paddingVertical: HDP(20),
   },
 });
 

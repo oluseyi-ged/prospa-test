@@ -1,4 +1,5 @@
 import {HDP} from '@helpers';
+import {palette} from '@theme';
 import {HS, VS} from '@utils/metrics';
 import {Dimensions, StyleSheet} from 'react-native';
 
@@ -7,7 +8,7 @@ const {width, height} = Dimensions.get('window');
 const style = StyleSheet.create({
   pageWrap: {
     height,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: palette.purple,
   },
   gif: {
     width: HS(240),

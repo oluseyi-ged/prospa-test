@@ -33,9 +33,9 @@ export const TabsStackScreens = () => {
           ],
         }}
         initialRouteName="Home">
-        <Tabs.Screen name="Home" component={Home} />
-        <Tabs.Screen name="Trips" component={Home} />
-        <Tabs.Screen name="Wallet" component={Home} />
+        <Tabs.Screen name="Accounts" component={Home} />
+        <Tabs.Screen name="Transfer" component={Home} />
+        <Tabs.Screen name="Invoice" component={Home} />
         <Tabs.Screen name="More" component={Home} />
       </Tabs.Navigator>
     </View>

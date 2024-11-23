@@ -1,5 +1,5 @@
 import RootNavigator from '@routes';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {LogBox} from 'react-native';
 import 'react-native-gesture-handler';
 import {Provider} from 'react-redux';
@@ -13,18 +13,6 @@ let NativeDevSettings;
 LogBox.ignoreAllLogs();
 
 const App = () => {
-  const connectToRemoteDebugger = () => {
-    if (__DEV__) {
-      NativeDevSettings =
-        require('react-native/Libraries/NativeModules/specs/NativeDevSettings').default;
-      NativeDevSettings.setIsDebuggingRemotely(true);
-    }
-  };
-
-  useEffect(() => {
-    connectToRemoteDebugger();
-  }, []);
-
   return (
     <>
       <Provider store={store}>

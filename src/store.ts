@@ -9,6 +9,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {combineReducers} from 'redux';
 import {persistReducer} from 'redux-persist';
 import thunkMiddleware from 'redux-thunk';
+import reactotron from '../ReactotronConfig';
 
 const reducers = combineReducers({
   [queryApi.reducerPath]: queryApi.reducer,
@@ -25,9 +26,14 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
+const reactotronEnhancers: any = reactotron?.createEnhancer
+  ? [reactotron.createEnhancer()]
+  : [];
+
 const store = configureStore({
   reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== 'production',
+  enhancers: __DEV__ ? reactotronEnhancers : [],
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,

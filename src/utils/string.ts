@@ -124,3 +124,25 @@ export function transformRates(ratesObject) {
 
   return result;
 }
+
+export function isURL(str) {
+  const pattern =
+    /^(https?:\/\/)?([\w\-]+(\.[\w\-]+)+)([\w\-\._~:/?#[\]@!$&'()*+,;=]*)?$/;
+  return pattern?.test(str);
+}
+
+export const calculatePercentages = data => {
+  return data.map(entry => {
+    const moneyIn = parseFloat(entry.money_in.replace(/[^0-9.-]+/g, ''));
+    const moneyOut = parseFloat(entry.money_out.replace(/[^0-9.-]+/g, ''));
+    const difference = parseFloat(entry.difference.replace(/[^0-9.-]+/g, ''));
+
+    return {
+      money_in: entry.money_in,
+      money_out: entry.money_out,
+      difference: entry.difference,
+      money_out_percentage: ((moneyOut / moneyIn) * 100).toFixed(2) + '%',
+      difference_percentage: ((difference / moneyIn) * 100).toFixed(2) + '%',
+    };
+  });
+};

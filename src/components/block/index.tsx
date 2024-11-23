@@ -1,12 +1,20 @@
 import {HDP} from '@helpers';
 import React, {FC} from 'react';
 import {
-  SafeAreaView,
+  Dimensions,
+  ImageBackground,
+  Keyboard,
+  Platform,
   StyleSheet,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+
+const {width, height} = Dimensions.get('window');
 
 interface Props {
   flex?: ViewStyle['flex'];
@@ -34,6 +42,7 @@ interface Props {
   overflow?: ViewStyle['overflow'];
   safe?: boolean;
   scroll?: boolean;
+  scrollIn?: boolean;
   shadow?: {
     color?: ViewStyle['shadowColor'];
     offset?: ViewStyle['shadowOffset'];
@@ -49,15 +58,25 @@ interface Props {
   ref?: any;
   testID?: any;
   showScrollbar?: boolean;
+  contentContainerStyle?: any;
+  disabled?: boolean;
+  isScrollable?: boolean;
+  backgroundImage?: any;
+  overlayColor?: string;
+  backgroundScroll?: boolean;
+  bounce?: boolean;
+  activeOpacity?: number;
+  scrollEventThrottle?: number;
 }
 
 export const Block: FC<Props> = ({
   children,
   style,
-  flex = 1,
-  showScrollbar = true,
+  flex,
+  showScrollbar = false,
   row,
   justify,
+  scrollIn,
   justifyContent,
   align,
   gap,
@@ -82,11 +101,20 @@ export const Block: FC<Props> = ({
   safe,
   scroll,
   shadow,
-  bg = '#fff',
+  bg,
   refreshControl,
-  transparent,
+  transparent = bg?.length ? false : true,
   testID,
   ref,
+  contentContainerStyle,
+  disabled,
+  isScrollable = true,
+  backgroundImage,
+  overlayColor,
+  backgroundScroll = false,
+  bounce = false,
+  activeOpacity,
+  scrollEventThrottle,
   ...props
 }) => {
   const blockStyle = StyleSheet.flatten([
@@ -131,46 +159,167 @@ export const Block: FC<Props> = ({
     bg !== undefined && !transparent && {backgroundColor: bg},
     overflow !== undefined && {overflow},
     shadow !== undefined && {...shadow},
-    // the style property will overwrite all above styles
     style,
   ]);
 
-  // renders SafeAreaView if safe props is true
-  if (safe) {
-    return (
-      <SafeAreaView testID={testID} ref={ref} style={blockStyle} {...props}>
+  const insets = useSafeAreaInsets();
+  const idleHeight = getStatusBarHeight();
+
+  const backdropStyle = StyleSheet.create({
+    backdrop: {
+      flex: 1,
+      backgroundColor: '#16032E',
+      paddingHorizontal: HDP(16),
+      paddingVertical: HDP(50),
+      overflow: 'hidden',
+      minHeight: height,
+      paddingTop: HDP(insets.top),
+    },
+    overlay: {
+      ...StyleSheet.absoluteFillObject,
+    },
+  });
+
+  const renderContent = () => (
+    <>
+      {overlayColor && (
+        <TouchableOpacity
+          disabled={!onPress || disabled}
+          style={[backdropStyle.overlay, {backgroundColor: overlayColor}]}
+          onPress={() => {
+            Keyboard.dismiss();
+            if (onPress) {
+              onPress();
+            }
+          }}></TouchableOpacity>
+      )}
+      <View testID={testID} ref={ref} style={[blockStyle]} {...props}>
         {children}
-      </SafeAreaView>
+      </View>
+    </>
+  );
+
+  if (backgroundImage) {
+    const backgroundContent = (
+      <ImageBackground
+        source={backgroundImage}
+        resizeMode="cover"
+        style={[backdropStyle.backdrop, style]}>
+        {renderContent()}
+      </ImageBackground>
     );
+
+    if (backgroundScroll) {
+      return (
+        <KeyboardAwareScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          showsVerticalScrollIndicator={showScrollbar}
+          style={{flex: 1, backgroundColor: '#16032E'}}
+          alwaysBounceVertical={bounce}
+          bounces={bounce}
+          keyboardShouldPersistTaps="handled"
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          scrollEnabled={isScrollable}>
+          {backgroundContent}
+        </KeyboardAwareScrollView>
+      );
+    }
+
+    return backgroundContent;
   }
 
-  // renders ScrollView if scroll props is true
-  if (scroll) {
+  if (safe) {
     return (
-      <SafeAreaView
+      <View
         testID={testID}
         ref={ref}
-        style={{flex: 1, backgroundColor: bg}}
+        style={[
+          {
+            paddingTop: HDP(insets.top),
+            flex: 1,
+            backgroundColor: bg,
+          },
+        ]}
         {...props}>
         <KeyboardAwareScrollView
           refreshControl={refreshControl}
           automaticallyAdjustContentInsets={false}
           keyboardShouldPersistTaps="handled"
-          style={blockStyle}
-          showsVerticalScrollIndicator={showScrollbar}
+          style={[blockStyle]}
+          alwaysBounceVertical={bounce}
+          bounces={bounce}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           {...props}>
           {children}
         </KeyboardAwareScrollView>
-      </SafeAreaView>
+      </View>
+    );
+  }
+
+  if (scroll) {
+    return (
+      <View
+        testID={testID}
+        style={{flex: 1, backgroundColor: bg, paddingTop: HDP(insets.top)}}
+        {...props}>
+        <KeyboardAwareScrollView
+          scrollEventThrottle={scrollEventThrottle}
+          refreshControl={refreshControl}
+          ref={ref}
+          automaticallyAdjustContentInsets={false}
+          keyboardShouldPersistTaps="handled"
+          style={[blockStyle]}
+          showsVerticalScrollIndicator={showScrollbar}
+          scrollEnabled={isScrollable}
+          alwaysBounceVertical={bounce}
+          bounces={bounce}
+          {...props}>
+          {children}
+        </KeyboardAwareScrollView>
+      </View>
+    );
+  }
+
+  if (scrollIn) {
+    return (
+      <KeyboardAwareScrollView
+        contentContainerStyle={contentContainerStyle}
+        refreshControl={refreshControl}
+        automaticallyAdjustContentInsets={false}
+        keyboardShouldPersistTaps="handled"
+        style={blockStyle}
+        showsVerticalScrollIndicator={showScrollbar}
+        scrollEnabled={isScrollable}
+        {...props}>
+        {children}
+      </KeyboardAwareScrollView>
+    );
+  }
+
+  const handlePress = () => {
+    Keyboard.dismiss();
+    if (onPress) {
+      onPress();
+    }
+  };
+
+  if (!onPress) {
+    return (
+      <View testID={testID} ref={ref} style={blockStyle} {...props}>
+        {children}
+      </View>
     );
   }
 
   return (
     <TouchableOpacity
+      hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
       testID={testID}
       ref={ref}
-      disabled={!onPress}
-      onPress={onPress}
+      disabled={disabled}
+      onPress={handlePress}
+      activeOpacity={activeOpacity}
       style={blockStyle}
       {...props}>
       {children}

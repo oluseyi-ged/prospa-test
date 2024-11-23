@@ -57,7 +57,7 @@ export const Text: FC<Props> = ({
   weight,
   fontWeight,
   center,
-  color = '#696969',
+  color = '#1C1335',
   opacity,
   font,
   fontFamily = family.Regular,
